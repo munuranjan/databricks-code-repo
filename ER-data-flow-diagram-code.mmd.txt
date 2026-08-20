@@ -1,0 +1,79 @@
+---
+config:
+  layout: elk
+---
+erDiagram
+    ACCOUNTS {
+        int AccountID PK
+        string AccountName
+        string AccountType
+        string Currency
+        string Status
+        date CreatedDate
+        date UpdatedDate
+    }
+
+    TRANSACTIONS {
+        int TransactionID PK
+        int AccountID FK
+        date TransactionDate
+        decimal Amount
+        string TransactionType
+        string Description
+        string Reference
+        string Status
+    }
+
+    USERS {
+        int UserID PK
+        string Username UK
+        string Email UK
+        string PasswordHash
+        string FirstName
+        string LastName
+        string Phone
+        string Status
+        date CreatedDate
+        date UpdatedDate
+    }
+
+    USER_ROLES {
+        int UserRoleID PK
+        int UserID FK
+        int RoleID FK
+        date AssignedDate
+    }
+
+    ROLES {
+        int RoleID PK
+        string RoleName UK
+        string Description
+    }
+
+    ROLE_PERMISSIONS {
+        int RolePermissionID PK
+        int RoleID FK
+        int PermissionID FK
+    }
+
+    PERMISSIONS {
+        int PermissionID PK
+        string PermissionName UK
+        string Description
+    }
+
+    USER_ACCOUNTS {
+        int UserAccountID PK
+        int UserID FK
+        int AccountID FK
+        string AccessLevel
+        date LinkedDate
+    }
+
+    USERS ||--o{ USER_ROLES : assigned
+    ROLES ||--o{ USER_ROLES : contains
+    ROLES ||--o{ ROLE_PERMISSIONS : grants
+    PERMISSIONS ||--o{ ROLE_PERMISSIONS : defines
+    USERS ||--o{ USER_ACCOUNTS : owns
+    ACCOUNTS ||--o{ USER_ACCOUNTS : linked_to
+    ACCOUNTS ||--o{ TRANSACTIONS : records
